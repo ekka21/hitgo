@@ -15,7 +15,7 @@ to hitgo.io server with ease.
 ## Example usages
 
     $ mkdir -p helloworld.com/htdocs
-    $ cd helloworld.com && echo '<?php echo "It works!";' >> htdocs/index.php
+    $ cd helloworld.com && echo '<?php echo "It works!";' >> public/index.php
     $ hitgo
 
 ![](https://media.giphy.com/media/3o7TKqI8ZFv83VZRqo/giphy.gif)
