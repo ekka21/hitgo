@@ -55,7 +55,7 @@ class DeployCommand extends Command
 
     protected function zip($app_name)
     {
-        $this->shell('tar -cvzf '.$this->hitgo_home.'/'.$app_name.' --exclude='.$app_name.' ./');
+        $this->shell('tar -cvzf '.$this->hitgo_home.'/'.$app_name.' --exclude=.DS_Store --exclude=.hitgo --exclude='.$app_name.' ./');
     }
 
     protected function upload($app_name)
