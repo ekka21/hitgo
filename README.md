@@ -14,7 +14,7 @@ to hitgo.io server with ease.
 
 ## Example usages
 
-    $ mkdir -p helloworld.com/htdocs
+    $ mkdir -p helloworld.com/public
     $ cd helloworld.com && echo '<?php echo "It works!";' >> public/index.php
     $ hitgo
 
@@ -22,5 +22,5 @@ to hitgo.io server with ease.
 
 ## Author Information
 
-Hitgo is created by [Ekkachai Danwanichakul](http://hitgo.com/)
+Hitgo is created by [Ekkachai Danwanichakul](http://api.hitgo.com/)
 
