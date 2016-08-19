@@ -7,10 +7,10 @@ if (file_exists(__DIR__.'/../../autoload.php')) {
     require __DIR__.'/vendor/autoload.php';
 }
 
-$command     = new Hitgo\Installer\Console\DeployCommand();
-$application = new Symfony\Component\Console\Application('Hitgo command line tool', '0.1.0');
+$app     = new Symfony\Component\Console\Application('Hitgo command line tool');
+$default_command = new Hitgo\Installer\Console\DeployCommand();
 
-$application->add($command);
-$application->setDefaultCommand($command->getName());
+$app->add($default_command);
+$app->setDefaultCommand($default_command->getName());
 
-$application->run();
+$app->run();

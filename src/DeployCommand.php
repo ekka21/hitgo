@@ -17,6 +17,8 @@ class DeployCommand extends Command
 {
     protected $hitgo_api  = 'https://api.hitgo.io/new/instant';
     protected $hitgo_home = './.hitgo/apps';
+    protected $web_roots  = ['public', 'htdocs', 'index.php', 'index.html', 'index.htm'];
+    protected $ignore_dir = ['.hitgo', '.DS_Store'];
 
     /**
      * Configure the command options.
@@ -41,9 +43,9 @@ class DeployCommand extends Command
 
         $app_name = $this->strRandom().'.tar.gz';
         $this->createHome();
-        $this->showProgress($output);
+      //  $this->showProgress($output, 5);
         $this->zip($app_name);
-        $this->upload($app_name);
+        $upload = $this->upload($app_name);
 
         $this->appReady($output, str_replace('.tar.gz','',$app_name));
     }
@@ -55,23 +57,53 @@ class DeployCommand extends Command
 
     protected function zip($app_name)
     {
-        $this->shell('tar -cvzf '.$this->hitgo_home.'/'.$app_name.' --exclude=.DS_Store --exclude=.hitgo --exclude='.$app_name.' ./');
+        $this->shell('tar -cvzf ' . $this->hitgo_home . '/' . $app_name . $this->exclude() . ' ./');
+    }
+
+    protected function exclude()
+    {
+        $out_str    = '';
+
+        foreach($this->ignore_dir as $dir)
+        {
+            $out_str .= ' --exclude=' . $dir;
+        }
+
+        return $out_str;
     }
 
     protected function upload($app_name)
     {
-        (new Client)->request('POST', $this->hitgo_api, [
+        $request = (new Client)->request('POST', $this->hitgo_api, [
             'multipart' =>[
                     [
                        'name'     => 'app',
                        'contents' => fopen($this->hitgo_home .'/'. $app_name, 'r'),
                        'filename' => $app_name,
-                    ],
-            ]
+                   ],[
+                       'name'      => 'web_root',
+                       'contents'  => '',
+                       'filename'  => $this->webRoot(),
+                   ]
+
+                ]
         ]);
+
+        return $request;
     }
 
-    protected function shell($command, $debug = false)
+    protected function webRoot()
+    {
+        foreach(scandir('./') as $dir)
+        {
+            if ( in_array($dir, $this->web_roots))
+                return $dir;
+        }
+
+        return '';
+    }
+
+    protected function shell($command)
     {
         $process = new Process($command);
         $process->run();
@@ -89,9 +121,8 @@ class DeployCommand extends Command
     	$output->writeln('<comment>http://'.$app_name.'.hitgo.io is ready and don\'t forget to be awesome!</comment>');
     }
 
-    protected function showProgress($output)
+    protected function showProgress($output, $rows)
     {
-        $rows = 5;
         $progressBar = new ProgressBar($output, $rows);
         $progressBar->setBarCharacter('<fg=magenta>=</>');
         $progressBar->setProgressCharacter("\xF0\x9F\x8D\xBA");
@@ -109,6 +140,7 @@ class DeployCommand extends Command
     protected function strRandom($length = 10)
     {
     	$pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
         return strtolower(substr(str_shuffle(str_repeat($pool, $length)), 0, $length));
     }
 
