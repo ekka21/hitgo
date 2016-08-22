@@ -39,11 +39,11 @@ class DeployCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-    	$output->writeln('<info>Deploying your app to hitgo server</info>');
+    	$output->writeln('<info>Deploying your app to hitgo</info>');
 
-        $app_name = $this->strRandom().'.tar.gz';
+        $app_name = $this->randomWords().'.tar.gz';
         $this->createHome();
-      //  $this->showProgress($output, 5);
+        $this->showProgress($output, 5);
         $this->zip($app_name);
         $upload = $this->upload($app_name);
 

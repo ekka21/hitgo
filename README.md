@@ -13,7 +13,7 @@ to hitgo.io server with ease.
     composer global require "hitgo/installer"
 
 ## Example usages
-By default, Hitgo uses `public` directory as a web root. If you don't have `public` directory, Hitgo automatically looks for `htdocs`, `index.php`, or index.html in your project.
+By default, Hitgo uses `public` directory as a web root. If you don't have `public` directory, Hitgo automatically looks for `htdocs`, `index.php`, or index.html` in your project.
 
     $ mkdir -p helloworld.com/public
     $ cd helloworld.com && echo '<?php echo "It works!";' >> public/index.php
